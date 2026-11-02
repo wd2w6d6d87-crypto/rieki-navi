@@ -1,1 +1,145 @@
 
+
+<!DOCTYPE html>
+
+<html lang="ja">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>利益ナビ</title>
+
+<style>
+
+*{box-sizing:border-box}
+
+body{margin:0;background:#f1f5f9;font-family:-apple-system,sans-serif;color:#172033}
+
+header{background:#111827;color:white;padding:25px;text-align:center}
+
+header h1{margin:0;font-size:28px}
+
+header p{color:#cbd5e1;font-size:13px}
+
+main{max-width:520px;margin:auto;padding:16px}
+
+.card{background:white;border-radius:18px;padding:20px;margin-bottom:16px}
+
+label{display:block;font-size:14px;font-weight:bold;margin:14px 0 6px}
+
+input{width:100%;padding:14px;border:1px solid #cbd5e1;border-radius:10px;font-size:17px}
+
+button{width:100%;padding:15px;background:#4f46e5;color:white;border:0;border-radius:11px;font-size:16px;font-weight:bold;margin-top:18px}
+
+.result{background:#111827;color:white;padding:20px;border-radius:14px;margin-top:18px}
+
+.big{font-size:34px;font-weight:bold;margin:8px 0}
+
+.item{margin-top:13px;color:#cbd5e1;font-size:14px}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>利益ナビ</h1>
+
+<p>物販の利益を最速計算</p>
+
+</header>
+
+<main>
+
+<div class="card">
+
+<h2>商品利益計算</h2>
+
+<label>仕入れ価格（円）</label>
+
+<input id="buy" type="number" value="3000">
+
+<label>販売価格（円）</label>
+
+<input id="sell" type="number" value="5000">
+
+<label>販売手数料（%）</label>
+
+<input id="fee" type="number" value="10">
+
+<label>送料（円）</label>
+
+<input id="ship" type="number" value="210">
+
+<label>その他経費（円）</label>
+
+<input id="other" type="number" value="0">
+
+<label>目標利益（円）</label>
+
+<input id="target" type="number" value="1000">
+
+<button onclick="calculate()">利益を計算する</button>
+
+<div class="result">
+
+<div>最終利益</div>
+
+<div class="big" id="profit">¥1,290</div>
+
+<div class="item" id="margin">利益率：25.8%</div>
+
+<div class="item" id="break">損益分岐点：¥3,567</div>
+
+<div class="item" id="targetPrice">目標利益に必要な販売価格：¥4,678</div>
+
+</div>
+
+</div>
+
+</main>
+
+<script>
+
+function calculate(){
+
+const buy=Number(document.getElementById('buy').value)||0;
+
+const sell=Number(document.getElementById('sell').value)||0;
+
+const fee=Number(document.getElementById('fee').value)||0;
+
+const ship=Number(document.getElementById('ship').value)||0;
+
+const other=Number(document.getElementById('other').value)||0;
+
+const target=Number(document.getElementById('target').value)||0;
+
+const rate=Math.min(100,Math.max(0,fee))/100;
+
+const profit=sell*(1-rate)-buy-ship-other;
+
+const fmt=n=>'¥'+Math.round(n).toLocaleString('ja-JP');
+
+const base=buy+ship+other;
+
+document.getElementById('profit').textContent=fmt(profit);
+
+document.getElementById('margin').textContent='利益率：'+(sell? (profit/sell*100).toFixed(1):0)+'%';
+
+document.getElementById('break').textContent='損益分岐点：'+(rate<1?fmt(base/(1-rate)):'計算不可');
+
+document.getElementById('targetPrice').textContent='目標利益に必要な販売価格：'+(rate<1?fmt((base+target)/(1-rate)):'計算不可');
+
+}
+
+</script>
+
+</body>
+
+</html>
